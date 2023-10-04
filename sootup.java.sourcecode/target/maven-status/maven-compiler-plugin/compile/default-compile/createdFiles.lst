@@ -1,0 +1,8 @@
+sootup/java/sourcecode/frontend/InstructionConverter.class
+sootup/java/sourcecode/inputlocation/JavaSourcePathAnalysisInputLocation.class
+sootup/java/sourcecode/frontend/WalaIRToJimpleConverter.class
+sootup/java/sourcecode/inputlocation/SourcecodeClassLoadingOptions.class
+sootup/java/sourcecode/WalaClassLoaderTestUtils.class
+sootup/java/sourcecode/inputlocation/SourcecodeClassLoadingOptions$1.class
+sootup/java/sourcecode/frontend/WalaSootMethod.class
+sootup/java/sourcecode/frontend/WalaJavaClassProvider.class

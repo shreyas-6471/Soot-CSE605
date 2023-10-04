@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: sootup.java.sourcecode.frontend.SelectedInstructionConversionTest
+-------------------------------------------------------------------------------
+Tests run: 21, Failures: 0, Errors: 0, Skipped: 2, Time elapsed: 45.144 s - in sootup.java.sourcecode.frontend.SelectedInstructionConversionTest

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: sootup.core.graph.MutableBlockStmtGraphTest
+-------------------------------------------------------------------------------
+Tests run: 41, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.059 s - in sootup.core.graph.MutableBlockStmtGraphTest

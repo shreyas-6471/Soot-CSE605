@@ -1,0 +1,59 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<name>SootUp Java Bytecode Frontend</name>
+	<artifactId>sootup.java.bytecode</artifactId>
+	<packaging>jar</packaging>
+	<parent>
+		<groupId>org.soot-oss</groupId>
+		<artifactId>sootup</artifactId>
+		<version>1.1.2-SNAPSHOT</version>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.soot-oss</groupId>
+			<artifactId>sootup.core</artifactId>
+			<version>1.1.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.soot-oss</groupId>
+			<artifactId>sootup.java.core</artifactId>
+			<version>1.1.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.asm</groupId>
+			<artifactId>asm-util</artifactId>
+			<version>9.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.asm</groupId>
+			<artifactId>asm-commons</artifactId>
+			<version>9.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.ThexXTURBOXx.dex2jar</groupId>
+			<artifactId>dex-tools</artifactId>
+			<version>v64</version>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.dex2jar</groupId>
+			<artifactId>dex2jar</artifactId>
+			<version>your-dex2jar-version</version>
+		</dependency>
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+		<repository>
+			<id>maven.google</id>
+			<url>https://maven.google.com/</url>
+		</repository>
+	</repositories>
+
+</project>

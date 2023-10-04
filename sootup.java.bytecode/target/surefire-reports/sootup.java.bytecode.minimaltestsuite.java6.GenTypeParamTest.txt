@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: sootup.java.bytecode.minimaltestsuite.java6.GenTypeParamTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.006 s - in sootup.java.bytecode.minimaltestsuite.java6.GenTypeParamTest

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: sootup.java.sourcecode.frontend.IfInstructionConversionTest
+-------------------------------------------------------------------------------
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.763 s - in sootup.java.sourcecode.frontend.IfInstructionConversionTest
