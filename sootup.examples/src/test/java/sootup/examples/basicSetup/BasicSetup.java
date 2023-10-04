@@ -148,6 +148,7 @@ public class BasicSetup {
       System.out.println("Statement: " + key);
       System.out.println("Associated Values: " + value);
     }
+    System.out.println("Simply adding comment");
     // Assert that Hello world print is present
     assertTrue(
         sootMethod.getBody().getStmts().stream()

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/sootup.analysis/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sootup.analysis/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sootup.callgraph/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sootup.callgraph/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sootup.core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sootup.core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sootup.examples/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sootup.examples/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sootup.java.bytecode/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sootup.java.bytecode/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sootup.java.core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sootup.java.core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sootup.java.sourcecode/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sootup.java.sourcecode/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sootup.jimple.parser/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sootup.jimple.parser/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sootup.report/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sootup.report/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sootup.tests/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sootup.tests/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+  </component>
+</project>
