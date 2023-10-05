@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.util.Pair;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -12,6 +13,8 @@ import org.junit.experimental.categories.Category;
 import sootup.core.Language;
 import sootup.core.Project;
 import sootup.core.inputlocation.AnalysisInputLocation;
+import sootup.core.jimple.basic.StmtPositionInfo;
+import sootup.core.jimple.basic.Value;
 import sootup.core.jimple.common.expr.AbstractInvokeExpr;
 import sootup.core.jimple.common.expr.JVirtualInvokeExpr;
 import sootup.core.jimple.common.ref.JArrayRef;
@@ -109,30 +112,32 @@ public class BasicSetup {
     SootMethod sootMethod = sootClass.getMethod(methodSignature.getSubSignature()).get();
 
     // Read jimple code of method
-    System.out.println(sootMethod.getBody());
+   // System.out.println(sootMethod.getBody());
 
-    System.out.println("The control flow graph is"+sootMethod.getBody().getStmts());
+   // System.out.println("The control flow graph is"+sootMethod.getBody().getStmts());
     List<Stmt> stmts = sootMethod.getBody().getStmts();
     HashMap<Stmt, List<Object>> statementObjectsMap = new HashMap<>();
     for(Stmt statement : stmts)
     {
-      System.out.println("Statements - "+statement);
-     // boolean isInvoke=statement.containsInvokeExpr();
-      //System.out.println("Is there invoke"+isInvoke);
       List<Object> util = new ArrayList<>();
-      util.add(statement.equivHashCode());
-      util.add((statement.getUses()));
+      Pair<String,List<Value>>p=new Pair<>("Defs present are",statement.getDefs());
+      util.add(p);
+      Pair<String,List<Value>>p2=new Pair<>("Uses present are",statement.getUses());
+      util.add((p2));
       if(statement.containsInvokeExpr())
       {
         Pair<String, AbstractInvokeExpr> pair1 = new Pair<>("InvokeExprs present are", statement.getInvokeExpr());
         util.add(pair1);
       }
-      util.add(statement.getDefs());
-      util.add((statement.hashCode()));
-      util.add(statement.branches());
+      Pair<String,Integer>p3=new Pair<>("HashCode is",statement.hashCode());
+      util.add(p3);
+      Pair<String, Boolean>p4=new Pair<>("isBranchPresent",statement.branches());
+      util.add(p4);
+      Pair<String, StmtPositionInfo>p5=new Pair<>("Defs present are",statement.getPositionInfo());
       util.add(statement.getPositionInfo());
-      util.add(statement.getExpectedSuccessorCount());
-      util.add(statement.containsFieldRef());
+      util.add(p5);
+      Pair<String,Boolean>p6=new Pair<>("isFieldRefPresent",statement.containsFieldRef());
+      util.add(p6);
       if(statement.containsArrayRef())
       {
         Pair<String, JArrayRef> pair1 = new Pair<>("Array Refs present are", statement.getArrayRef());
@@ -148,7 +153,6 @@ public class BasicSetup {
       System.out.println("Statement: " + key);
       System.out.println("Associated Values: " + value);
     }
-    System.out.println("Simply adding comment");
     // Assert that Hello world print is present
     assertTrue(
         sootMethod.getBody().getStmts().stream()
