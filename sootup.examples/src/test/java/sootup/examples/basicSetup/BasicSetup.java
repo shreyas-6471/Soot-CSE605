@@ -111,10 +111,7 @@ public class BasicSetup {
     assertTrue(sootClass.getMethod(methodSignature.getSubSignature()).isPresent());
     SootMethod sootMethod = sootClass.getMethod(methodSignature.getSubSignature()).get();
 
-    // Read jimple code of method
-   // System.out.println(sootMethod.getBody());
 
-   // System.out.println("The control flow graph is"+sootMethod.getBody().getStmts());
     List<Stmt> stmts = sootMethod.getBody().getStmts();
     HashMap<Stmt, List<Object>> statementObjectsMap = new HashMap<>();
     for(Stmt statement : stmts)
