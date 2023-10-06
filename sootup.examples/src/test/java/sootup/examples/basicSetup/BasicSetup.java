@@ -34,7 +34,6 @@ import sootup.java.core.language.JavaLanguage;
 import sootup.java.sourcecode.inputlocation.JavaSourcePathAnalysisInputLocation;
 import sootup.jimple.parser.JimpleAnalysisInputLocation;
 import sootup.jimple.parser.JimpleProject;
-
 import java.util.List;
 
 /** This example illustrates how to create and use a new Soot Project. */
