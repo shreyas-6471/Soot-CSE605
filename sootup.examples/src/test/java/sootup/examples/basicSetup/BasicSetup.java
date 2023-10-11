@@ -86,9 +86,9 @@ public class BasicSetup {
 
     // Create a view for project, which allows us to retrieve classes
     View view = project.createView();
-    System.out.println("ClassType: " + classType);
+    //System.out.println("ClassType: " + classType);
     SootClass<JavaSootClassSource> sootClass = (SootClass<JavaSootClassSource>) view.getClass(classType).orElse(null);
-    System.out.println("SootClass: " + sootClass);
+    //System.out.println("SootClass: " + sootClass);
 
     if (sootClass != null) {
       System.out.println("Method Available: " + sootClass.getMethod(methodSignature.getSubSignature()).isPresent());

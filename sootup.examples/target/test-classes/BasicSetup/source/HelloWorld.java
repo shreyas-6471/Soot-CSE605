@@ -1,5 +1,4 @@
-public class HelloWorld {
-  public HelloWorld() {
+public class HelloWorld { public HelloWorld() {
   }
   public static int getSum(int arr[])
   {
