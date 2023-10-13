@@ -137,7 +137,7 @@ public class BasicSetup {
       if(statement.containsArrayRef())
       {
         Pair<String, JArrayRef> pair1 = new Pair<>("Array Refs present are", statement.getArrayRef());
-        util.add(pair1);
+        util.add(pair1);;
       }
       statementObjectsMap.put(statement,util);
     }
