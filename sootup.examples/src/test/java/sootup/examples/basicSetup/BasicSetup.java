@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import com.ibm.wala.cast.ir.ssa.analysis.LiveAnalysis;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.util.Pair;
 import org.junit.Ignore;
@@ -112,6 +113,8 @@ public class BasicSetup {
 
 
     List<Stmt> stmts = sootMethod.getBody().getStmts();
+    System.out.println("Printing now"+sootMethod.getBody().getStmtGraph().getEntrypoints());
+    
     HashMap<Stmt, List<Object>> statementObjectsMap = new HashMap<>();
     for(Stmt statement : stmts)
     {
@@ -149,6 +152,7 @@ public class BasicSetup {
       System.out.println("Statement: " + key);
       System.out.println("Associated Values: " + value);
     }
+
     // Assert that Hello world print is present
     assertTrue(
         sootMethod.getBody().getStmts().stream()
