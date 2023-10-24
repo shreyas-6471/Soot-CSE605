@@ -4,7 +4,7 @@ import categories.Java8Test;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-
+import com.googlecode.dex2jar.ir.stmt.AssignStmt;
 import com.ibm.wala.cast.ir.ssa.analysis.LiveAnalysis;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.util.Pair;
@@ -35,6 +35,7 @@ import sootup.java.core.language.JavaLanguage;
 import sootup.java.sourcecode.inputlocation.JavaSourcePathAnalysisInputLocation;
 import sootup.jimple.parser.JimpleAnalysisInputLocation;
 import sootup.jimple.parser.JimpleProject;
+
 import java.util.List;
 
 /** This example illustrates how to create and use a new Soot Project. */
@@ -60,15 +61,15 @@ public class BasicSetup {
   }
 
   @Test
-  public void createByteCodeProject() {
+  public void createByteCodeProject() throws NoSuchMethodException {
     // Create a AnalysisInputLocation, which points to a directory. All class files will be loaded
     // from the directory
-    Path pathToBinary = Paths.get("/Users/shreyassl/Downloads/SootUp-develop/sootup.examples/src/test/resources/BasicSetup/source");
+    Path pathToBinary = Paths.get("/Users/shreyassl/Documents/GitHub/Soot-CSE605/sootup.examples/src/test/resources/BasicSetup/source");
     AnalysisInputLocation<JavaSootClass> inputLocation =
         PathBasedAnalysisInputLocation.create(pathToBinary, null);
 
-    // Specify the language of the JavaProject. This is especially relevant for Multi-release jars,
-    // where classes are loaded depending on the language level of the analysis
+//     Specify the language of the JavaProject. This is especially relevant for Multi-release jars,
+//     where classes are loaded depending on the language level of the analysis
     Language language = new JavaLanguage(8);
 
     // Create a new JavaProject based on the input location
@@ -79,11 +80,18 @@ public class BasicSetup {
     ClassType classType = project.getIdentifierFactory().getClassType("HelloWorld");
 
     // Create a signature for the method we want to analyze
+//    MethodSignature methodSignature =
+//        project
+//            .getIdentifierFactory()
+//            .getMethodSignature(
+//                classType, "main", "void", Collections.singletonList("java.lang.String[]"));
+//                    //classType, "HelloWorld", "void", Collections.singletonList("java.lang.String[]"));
     MethodSignature methodSignature =
-        project
-            .getIdentifierFactory()
-            .getMethodSignature(
-                classType, "main", "void", Collections.singletonList("java.lang.String[]"));
+            project
+                    .getIdentifierFactory()
+                    .getMethodSignature(
+                            classType, "customfn", "void", Collections.emptyList());
+
 
     // Create a view for project, which allows us to retrieve classes
     View view = project.createView();
@@ -110,14 +118,29 @@ public class BasicSetup {
     // Alternatively:
     assertTrue(sootClass.getMethod(methodSignature.getSubSignature()).isPresent());
     SootMethod sootMethod = sootClass.getMethod(methodSignature.getSubSignature()).get();
+System.out.println(sootMethod.getBody().getStmtGraph().getEntrypoints());
+System.out.println(sootMethod.getBody().getStmts());
 
 
     List<Stmt> stmts = sootMethod.getBody().getStmts();
-    System.out.println("Printing now"+sootMethod.getBody().getStmtGraph().getEntrypoints());
-    
+    //System.out.println(sootMethod.getClass().getMethod("HelloWorld").getName());
+
+    System.out.println("Printing now"+sootMethod.getBody().getStmtGraph());
+    //sootMethod.getBody().getStmtGraph()
+    System.out.println("Entry points are"+sootMethod.getBody().getStmtGraph().getEntrypoints());
+    System.out.println("Varibales are"+sootMethod.getBody().getStmtGraph().getLabeledStmts());
+    System.out.println("Locals are"+sootMethod.getBody().getLocals());
     HashMap<Stmt, List<Object>> statementObjectsMap = new HashMap<>();
     for(Stmt statement : stmts)
     {
+      System.out.println("Statement is"+statement);
+      System.out.println("Defs present are"+statement.getDefs());
+      System.out.println("Hopefully right side are"+statement.getUses());
+
+      System.out.println("Uses and Defs are"+statement.getUsesAndDefs());
+      System.out.println("Statment as string is"+statement.toString());
+      System.out.println("Printing the right sides first part: " + Arrays.toString(statement.getUses().toArray()));
+//      System.out.println();
       List<Object> util = new ArrayList<>();
       Pair<String,List<Value>>p=new Pair<>("Defs present are",statement.getDefs());
       util.add(p);
@@ -137,12 +160,16 @@ public class BasicSetup {
       util.add(p5);
       Pair<String,Boolean>p6=new Pair<>("isFieldRefPresent",statement.containsFieldRef());
       util.add(p6);
+      //statement.getDefs()
+    // statement.getUsesAndDefs()
+      //System.out.println("LHS is"+lhs);
       if(statement.containsArrayRef())
       {
         Pair<String, JArrayRef> pair1 = new Pair<>("Array Refs present are", statement.getArrayRef());
         util.add(pair1);;
       }
       statementObjectsMap.put(statement,util);
+
     }
     System.out.println("Map is formed!! printing below");
     for (Map.Entry<Stmt, List<Object>> entry : statementObjectsMap.entrySet()) {
