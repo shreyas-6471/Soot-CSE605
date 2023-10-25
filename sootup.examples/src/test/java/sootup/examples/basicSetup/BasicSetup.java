@@ -136,7 +136,7 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
           if (predecessors.size() == 1) {
               System.out.println("Came here with 1 predecessor");
               Set<Pair<String, Integer>> newset = statementInstantVals.get(predecessors.get(0));
-              Set<Pair<String,Integer>> oldset = new HashSet<>(newset);  // Deep copy of newset
+              Set<Pair<String,Integer>> oldset = new HashSet<>(newset);
 
               transferFunction(statement, newset);
 
@@ -261,19 +261,19 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
             System.out.println("printing inside transfer fn" + statement.getDefs().get(0).toString());
             Pair<String, Integer> toRemove = null;
             for (Pair<String, Integer> p : newset) {
-                // To track the pair we want to remove
+
                 if (p.getKey().toString().equals(statement.getDefs().get(0).toString())) {
                     System.out.println(" Found the pair to update");
-                    toRemove = p;  // Found the pair to update
+                    toRemove = p;
                     System.out.println("to remove is" + toRemove);
-                    break;  // Exit the loop once we find the pair
+                    break;
                 }
             }
 
             if (toRemove != null) {
                 System.out.println("Removing and adding new pair from set");
-                newset.remove(toRemove);  // Remove the old pair
-                newset.add(new Pair<>(toRemove.getKey(), Integer.parseInt(statement.getUses().get(0).toString())));  // Add the new pair with updated value
+                newset.remove(toRemove);
+                newset.add(new Pair<>(toRemove.getKey(), Integer.parseInt(statement.getUses().get(0).toString())));
             }
         }
     }
