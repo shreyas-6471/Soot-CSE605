@@ -119,7 +119,7 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
       Set<Pair<String, Integer>> initset = new HashSet<>();
       for(Local variable :sootMethod.getBody().getLocals())
       {
-          System.out.println("Variable is"+variable);
+          //System.out.println("Variable is"+variable);
           initset.add(new Pair<>(variable.toString(), Integer.MAX_VALUE));
       }
       Queue<Stmt> stmtQueue = new LinkedList<>();
@@ -130,8 +130,9 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
       while (!stmtQueue.isEmpty())
       {
           Stmt statement = stmtQueue.poll();
+          System.out.println("Encountered statement is"+statement);
           List<Stmt>predecessors = sootMethod.getBody().getStmtGraph().predecessors(statement);
-          System.out.println(predecessors);
+         // System.out.println(predecessors);
 
           if (predecessors.size() == 1) {
               System.out.println("Came here with 1 predecessor");
@@ -153,22 +154,19 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
               Set<Pair<String, Integer>> newset = initset;
               Set<Pair<String,Integer>> oldset = new HashSet<>(newset);  // Deep copy
 
-              System.out.println("Old set before calling transfer fn is");
+             /* System.out.println("Old set before calling transfer fn is");
               for (Pair<String, Integer> p : oldset) {
                   System.out.println("pair is" + p);
-              }
-
+              }*/
               transferFunction(statement, newset);
-
-              System.out.println("Printing after transfer fn new set is");
+              /*System.out.println("Printing after transfer fn new set is");
               for (Pair<String, Integer> p : newset) {
                   System.out.println("pair is" + p);
               }
               System.out.println("Printing after transfer fn old set is");
               for (Pair<String, Integer> p : oldset) {
                   System.out.println("pair is" + p);
-              }
-
+              }*/
               if (!newset.equals(oldset)) {
                   System.out.println("Came here where we're adding successor");
                   for (Stmt successor : sootMethod.getBody().getStmtGraph().successors(statement)) {

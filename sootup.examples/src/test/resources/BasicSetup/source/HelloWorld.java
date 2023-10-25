@@ -1,8 +1,9 @@
 public class HelloWorld {
   public static void customfn() {
   int x=5+5;
-  System.out.println("Hii x value is"+x);
-
+  int y=x+2;
+  System.out.println("Hii x Value is"+x);
+  System.out.println("Hii y Value is"+y);
   }
   public static void main(String[] var0)
   {
