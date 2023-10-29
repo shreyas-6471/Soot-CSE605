@@ -113,8 +113,7 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
     System.out.println("Entry points are"+sootMethod.getBody().getStmtGraph().getEntrypoints());
     System.out.println("Varibales are"+sootMethod.getBody().getStmtGraph().getLabeledStmts());
     System.out.println("Locals are"+sootMethod.getBody().getLocals());
-
-    //Forward Flow analysis for a method level...
+    //Forward Flow analysis for a method level...(Intra method)
     HashMap<Stmt, Set<Pair<String, Integer>>> statementInstantVals = new HashMap<>();
       Set<Pair<String, Integer>> initset = new HashSet<>();
       for(Local variable :sootMethod.getBody().getLocals())
@@ -133,38 +132,41 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
           System.out.println("Encountered statement is"+statement);
           List<Stmt>predecessors = sootMethod.getBody().getStmtGraph().predecessors(statement);
          // System.out.println(predecessors);
-
-          if (predecessors.size() == 1) {
+          if (predecessors.size() == 1)
+          {
               System.out.println("Came here with 1 predecessor");
               Set<Pair<String, Integer>> newset = statementInstantVals.get(predecessors.get(0));
               Set<Pair<String,Integer>> oldset = new HashSet<>(newset);
 
               transferFunction(statement, newset);
 
-              if (!newset.equals(oldset)) {
-                  for (Stmt successor : sootMethod.getBody().getStmtGraph().successors(statement)) {
+              if (!newset.equals(oldset))
+              {
+                  for (Stmt successor : sootMethod.getBody().getStmtGraph().successors(statement))
+                  {
                       System.out.println("Adding the successors");
                       stmtQueue.offer(successor);
                   }
               }
               statementInstantVals.put(statement, newset);
-
           } else if (predecessors.size() == 0) {
               System.out.println("Came here where predec is 0");
               Set<Pair<String, Integer>> newset = initset;
-              Set<Pair<String,Integer>> oldset = new HashSet<>(newset);  // Deep copy
-
+              Set<Pair<String,Integer>> oldset = new HashSet<>(newset);
              /* System.out.println("Old set before calling transfer fn is");
-              for (Pair<String, Integer> p : oldset) {
+              for (Pair<String, Integer> p : oldset)
+               {
                   System.out.println("pair is" + p);
               }*/
               transferFunction(statement, newset);
               /*System.out.println("Printing after transfer fn new set is");
-              for (Pair<String, Integer> p : newset) {
+              for (Pair<String, Integer> p : newset)
+               {
                   System.out.println("pair is" + p);
               }
               System.out.println("Printing after transfer fn old set is");
-              for (Pair<String, Integer> p : oldset) {
+              for (Pair<String, Integer> p : oldset)
+               {
                   System.out.println("pair is" + p);
               }*/
               if (!newset.equals(oldset)) {
@@ -179,7 +181,6 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
               System.out.println("Came to else");
           }
       }
-
       HashMap<Stmt, List<Object>> statementObjectsMap = new HashMap<>();
 //    for(Stmt statement : stmts)
 //    {
@@ -258,17 +259,18 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
             System.out.println("printing inside transfer fn" + statement.getUses().get(0).toString());
             System.out.println("printing inside transfer fn" + statement.getDefs().get(0).toString());
             Pair<String, Integer> toRemove = null;
-            for (Pair<String, Integer> p : newset) {
-
-                if (p.getKey().toString().equals(statement.getDefs().get(0).toString())) {
+            for (Pair<String, Integer> p : newset)
+            {
+                if (p.getKey().toString().equals(statement.getDefs().get(0).toString()))
+                {
                     System.out.println(" Found the pair to update");
                     toRemove = p;
                     System.out.println("to remove is" + toRemove);
                     break;
                 }
             }
-
-            if (toRemove != null) {
+            if (toRemove != null)
+            {
                 System.out.println("Removing and adding new pair from set");
                 newset.remove(toRemove);
                 newset.add(new Pair<>(toRemove.getKey(), Integer.parseInt(statement.getUses().get(0).toString())));
