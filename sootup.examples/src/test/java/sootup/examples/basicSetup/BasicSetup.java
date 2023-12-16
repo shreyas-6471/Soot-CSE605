@@ -61,6 +61,7 @@ public class BasicSetup {
   public void createByteCodeProject() throws NoSuchMethodException {
     // Create a AnalysisInputLocation, which points to a directory. All class files will be loaded
     // from the directory
+      long startTime = System.currentTimeMillis();
     Path pathToBinary = Paths.get("/Users/shreyassl/Documents/GitHub/Soot-CSE605/sootup.examples/src/test/resources/BasicSetup/source");
     AnalysisInputLocation<JavaSootClass> inputLocation =
         PathBasedAnalysisInputLocation.create(pathToBinary, null);
@@ -244,6 +245,9 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
               System.out.println("Came to else");
           }
       }
+      long endTime = System.currentTimeMillis();
+      long duration = endTime - startTime; // duration in milliseconds
+      System.out.println("Execution time: " + duration + " ms");
       System.out.println("Sinks are"+sinksPresent);
       System.out.println("Sources Present are"+sourcePresent);
       HashMap<Stmt, List<Object>> statementObjectsMap = new HashMap<>();
