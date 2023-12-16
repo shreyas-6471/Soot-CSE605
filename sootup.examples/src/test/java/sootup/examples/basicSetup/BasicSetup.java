@@ -4,6 +4,13 @@ import categories.Java8Test;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+import com.ibm.wala.ipa.callgraph.CallGraph;
+import com.ibm.wala.ipa.cfg.InterproceduralCFG;
+import sootup.*;
 import javafx.util.Pair;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -29,11 +36,9 @@ import sootup.jimple.parser.JimpleProject;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.List;
-
 /** This example illustrates how to create and use a new Soot Project. */
 @Category(Java8Test.class)
 public class BasicSetup {
-
   @Test
   public void createSourceCodeProject() {
     Path pathToSource = Paths.get("src/test/resources/BasicSetup/source");
@@ -43,7 +48,6 @@ public class BasicSetup {
     Project project =
         JavaProject.builder((JavaLanguage) language).addInputLocation(inputLocation).build();
   }
-
   @Ignore
   public void createJimpleProject() {
     Path pathToJimple = Paths.get("src/test/resources/BasicSetup/jimple");
@@ -79,6 +83,7 @@ public class BasicSetup {
                     .getIdentifierFactory()
                     .getMethodSignature(
                             classType, "customfn", "void", Collections.emptyList());
+
     // Create a view for project, which allows us to retrieve classes
     View view = project.createView();
     //System.out.println("ClassType: " + classType);
@@ -105,6 +110,7 @@ public class BasicSetup {
     assertTrue(sootClass.getMethod(methodSignature.getSubSignature()).isPresent());
     SootMethod sootMethod = sootClass.getMethod(methodSignature.getSubSignature()).get();
 System.out.println(sootMethod.getBody().getStmtGraph().getEntrypoints());
+//sootMethod.getBody().get
 System.out.println(sootMethod.getBody().getStmts());
 List<Stmt> stmts = sootMethod.getBody().getStmts();
     //System.out.println(sootMethod.getClass().getMethod("HelloWorld").getName());
@@ -113,8 +119,35 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
     System.out.println("Entry points are"+sootMethod.getBody().getStmtGraph().getEntrypoints());
     System.out.println("Varibales are"+sootMethod.getBody().getStmtGraph().getLabeledStmts());
     System.out.println("Locals are"+sootMethod.getBody().getLocals());
+     // InterproceduralCFG icfg = new InterproceduralCFG((CallGraph) sootMethod);
+      //System.out.println("from icfg");
+      //System.out.println(icfg.getCallGraph().getEntrypointNodes());
     //Forward Flow analysis for a method level...(Intra method)
+      String filePathSource = "/Users/shreyassl/Documents/GitHub/Soot-CSE605/sources.txt";
+      String filePathSink="/Users/shreyassl/Documents/GitHub/Soot-CSE605/sinks.txt";
+      HashMap<String, Boolean>sources=new HashMap<>();
+      HashMap<String, Boolean> sinks=new HashMap<>();
+      try (BufferedReader reader = new BufferedReader(new FileReader(filePathSource))) {
+          String line;
+          while ((line = reader.readLine()) != null) {
+              System.out.println(line); // Process the line
+              sources.put(line,true);
+          }
+      } catch (IOException e) {
+          e.printStackTrace();
+      }
+      try (BufferedReader reader = new BufferedReader(new FileReader(filePathSink))) {
+          String line;
+          while ((line = reader.readLine()) != null) {
+              System.out.println(line); // Process the line
+              sinks.put(line,true);
+          }
+      } catch (IOException e) {
+          e.printStackTrace();
+      }
     HashMap<Stmt, Set<Pair<String, Integer>>> statementInstantVals = new HashMap<>();
+      Set<String>sourcePresent=new HashSet<>();
+      Set<String>sinksPresent=new HashSet<>();
       Set<Pair<String, Integer>> initset = new HashSet<>();
       for(Local variable :sootMethod.getBody().getLocals())
       {
@@ -122,6 +155,7 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
           initset.add(new Pair<>(variable.toString(), Integer.MAX_VALUE));
       }
       Queue<Stmt> stmtQueue = new LinkedList<>();
+
         for(Stmt statement:sootMethod.getBody().getStmtGraph().getEntrypoints())
         {
             stmtQueue.offer(statement);
@@ -130,6 +164,14 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
       {
           Stmt statement = stmtQueue.poll();
           System.out.println("Encountered statement is"+statement);
+          if(sources.containsKey(statement))
+          {
+              sourcePresent.add(statement.toString());
+          }
+          if(sinks.containsKey(statement))
+          {
+              sinksPresent.add(statement.toString());
+          }
           List<Stmt>predecessors = sootMethod.getBody().getStmtGraph().predecessors(statement);
          // System.out.println(predecessors);
           if (predecessors.size() == 1)
@@ -149,7 +191,8 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
                   }
               }
               statementInstantVals.put(statement, newset);
-          } else if (predecessors.size() == 0) {
+          }
+          else if (predecessors.size() == 0) {
               System.out.println("Came here where predec is 0");
               Set<Pair<String, Integer>> newset = initset;
               Set<Pair<String,Integer>> oldset = new HashSet<>(newset);
@@ -181,6 +224,8 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
               System.out.println("Came to else");
           }
       }
+      System.out.println("Sinks are"+sinksPresent);
+      System.out.println("Sources Present are"+sourcePresent);
       HashMap<Stmt, List<Object>> statementObjectsMap = new HashMap<>();
 //    for(Stmt statement : stmts)
 //    {
@@ -242,7 +287,6 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
 //                            .getArg(0)
 //                            .equivTo(JavaJimple.getInstance().newStringConstant("Hello World!"))));
   }
-
     public void transferFunction(Stmt statement, Set<Pair<String, Integer>> newset)
     {
         if (statement.toString().contains("+") || statement.toString().contains("-") || statement.toString().contains("*") || statement.toString().contains("/"))
@@ -277,5 +321,4 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
             }
         }
     }
-
 }
