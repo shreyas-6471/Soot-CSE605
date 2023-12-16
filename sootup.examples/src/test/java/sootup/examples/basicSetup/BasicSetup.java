@@ -7,7 +7,8 @@ import java.util.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import com.ibm.wala.ipa.callgraph.CallGraph;
 import com.ibm.wala.ipa.cfg.InterproceduralCFG;
 import sootup.*;
@@ -305,12 +306,58 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
 //                        && stmt.getInvokeExpr()
 //                            .getArg(0)
 //                            .equivTo(JavaJimple.getInstance().newStringConstant("Hello World!"))));
+
   }
+
+    public Integer getValueFromSet(String variable, Set<Pair<String, Integer>> newSet) {
+        for (Pair<String, Integer> pair : newSet) {
+            if (pair.getKey().equals(variable)) {
+                return pair.getValue();
+            }
+        }
+        return null;
+    }
+
+    public void updateSet(Set<Pair<String, Integer>> newSet, String variable, int value) {
+        newSet.removeIf(pair -> pair.getKey().equals(variable));
+        newSet.add(new Pair<>(variable, value));
+    }
+
+    public int performArithmeticOperation(int leftVal, int rightVal, char operation) {
+        switch (operation) {
+            case '+': return leftVal + rightVal;
+            case '-': return leftVal - rightVal;
+            case '*': return leftVal * rightVal;
+            case '/': return leftVal / rightVal; // Note: Integer division, no decimal
+            default: throw new IllegalArgumentException("Invalid arithmetic operation: " + operation);
+        }
+    }
+
     public void transferFunction(Stmt statement, Set<Pair<String, Integer>> newset)
     {
-        if (statement.toString().contains("+") || statement.toString().contains("-") || statement.toString().contains("*") || statement.toString().contains("/"))
-        {
-            System.out.println("Encountered arithematic expression");
+        String stmtString = statement.toString();
+        if (stmtString.matches(".*[+\\-*/].*")) {
+            System.out.println("Encountered arithmetic expression");
+
+            // Regular expression to extract variable names and numbers from the expression
+            Pattern pattern = Pattern.compile("([a-zA-Z]+\\d*)\\s*=\\s*([a-zA-Z]+\\d*)\\s*([+\\-*/])\\s*(\\d+|([a-zA-Z]+\\d*))");
+            Matcher matcher = pattern.matcher(stmtString);
+
+            if (matcher.find()) {
+                String leftVar = matcher.group(1);
+                String rightVar = matcher.group(2);
+                char operation = matcher.group(3).charAt(0);
+                String rightValue = matcher.group(4);
+
+                Integer leftVal = getValueFromSet(leftVar, newset);
+                Integer rightVal = rightValue.matches("\\d+") ? Integer.parseInt(rightValue) : getValueFromSet(rightValue, newset);
+
+                if (leftVal != null && rightVal != null) {
+                    int result = performArithmeticOperation(leftVal, rightVal, operation);
+                    updateSet(newset, leftVar, result);
+                    updateSet(newset, leftVar, result);
+                }
+            }
         }
         else if(statement.toString().contains("java"))
         {
