@@ -164,6 +164,25 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
       {
           Stmt statement = stmtQueue.poll();
           System.out.println("Encountered statement is"+statement);
+          sources.forEach((key, value) -> {
+             // System.out.println("Key: " + key + ", Value: " + value);
+              if(statement.toString().contains(key))
+              {
+                  sourcePresent.add(statement.toString());
+              }
+          });
+          sinks.forEach((key, value) -> {
+              // System.out.println("Key: " + key + ", Value: " + value);
+              key=key.trim();
+              if(!key.equals(""))
+              {
+                  if(statement.toString().contains(key))
+                  {
+                      sinksPresent.add(statement.toString());
+                  }
+              }
+
+          });
           if(sources.containsKey(statement))
           {
               sourcePresent.add(statement.toString());
