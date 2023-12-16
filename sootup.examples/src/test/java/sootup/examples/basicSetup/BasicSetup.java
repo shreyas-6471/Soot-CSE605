@@ -56,8 +56,16 @@ public class BasicSetup {
         new JimpleAnalysisInputLocation(pathToJimple);
     Project project = new JimpleProject(inputLocation);
   }
+    public Set<Pair<String, Integer>> mergeSets(Collection<Set<Pair<String, Integer>>> sets) {
+        Set<Pair<String, Integer>> mergedSet = new HashSet<>();
+        for (Set<Pair<String, Integer>> set : sets) {
+            mergedSet.addAll(set);
+        }
+        return mergedSet;
+    }
 
-  @Test
+
+    @Test
   public void createByteCodeProject() throws NoSuchMethodException {
     // Create a AnalysisInputLocation, which points to a directory. All class files will be loaded
     // from the directory
@@ -193,61 +201,38 @@ List<Stmt> stmts = sootMethod.getBody().getStmts();
           {
               sinksPresent.add(statement.toString());
           }
-          List<Stmt>predecessors = sootMethod.getBody().getStmtGraph().predecessors(statement);
-         // System.out.println(predecessors);
-          if (predecessors.size() == 1)
-          {
-              System.out.println("Came here with 1 predecessor");
-              Set<Pair<String, Integer>> newset = statementInstantVals.get(predecessors.get(0));
-              Set<Pair<String,Integer>> oldset = new HashSet<>(newset);
 
-              transferFunction(statement, newset);
+          List<Stmt> predecessors = sootMethod.getBody().getStmtGraph().predecessors(statement);
+          Set<Pair<String, Integer>> newSet;
 
-              if (!newset.equals(oldset))
-              {
-                  for (Stmt successor : sootMethod.getBody().getStmtGraph().successors(statement))
-                  {
-                      System.out.println("Adding the successors");
-                      stmtQueue.offer(successor);
-                  }
-              }
-              statementInstantVals.put(statement, newset);
-          }
-          else if (predecessors.size() == 0) {
-              System.out.println("Came here where predec is 0");
-              Set<Pair<String, Integer>> newset = initset;
-              Set<Pair<String,Integer>> oldset = new HashSet<>(newset);
-             /* System.out.println("Old set before calling transfer fn is");
-              for (Pair<String, Integer> p : oldset)
-               {
-                  System.out.println("pair is" + p);
-              }*/
-              transferFunction(statement, newset);
-              /*System.out.println("Printing after transfer fn new set is");
-              for (Pair<String, Integer> p : newset)
-               {
-                  System.out.println("pair is" + p);
-              }
-              System.out.println("Printing after transfer fn old set is");
-              for (Pair<String, Integer> p : oldset)
-               {
-                  System.out.println("pair is" + p);
-              }*/
-              if (!newset.equals(oldset)) {
-                  System.out.println("Came here where we're adding successor");
-                  for (Stmt successor : sootMethod.getBody().getStmtGraph().successors(statement)) {
-                      System.out.println("Adding the successors");
-                      stmtQueue.offer(successor);
-                  }
-              }
-              statementInstantVals.put(statement, newset);
+          if (predecessors.size() == 1) {
+              newSet = new HashSet<>(statementInstantVals.get(predecessors.get(0)));
+          } else if (predecessors.size() == 0) {
+              newSet = new HashSet<>(initset);
           } else {
-              System.out.println("Came to else");
+              // When there are multiple predecessors
+              List<Set<Pair<String, Integer>>> setsFromPredecessors = new ArrayList<>();
+              for (Stmt pred : predecessors) {
+                  setsFromPredecessors.add(statementInstantVals.get(pred));
+              }
+              newSet = mergeSets(setsFromPredecessors);
           }
+
+          Set<Pair<String, Integer>> oldSet = new HashSet<>(newSet);
+          transferFunction(statement, newSet);
+
+          if (!newSet.equals(oldSet)) {
+              for (Stmt successor : sootMethod.getBody().getStmtGraph().successors(statement)) {
+                  stmtQueue.offer(successor);
+              }
+          }
+          statementInstantVals.put(statement, newSet);
       }
+
       long endTime = System.currentTimeMillis();
       long duration = endTime - startTime; // duration in milliseconds
       System.out.println("Execution time: " + duration + " ms");
+
       System.out.println("Sinks are"+sinksPresent);
       System.out.println("Sources Present are"+sourcePresent);
       HashMap<Stmt, List<Object>> statementObjectsMap = new HashMap<>();
