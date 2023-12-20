@@ -14,6 +14,8 @@ public class HelloWorld {
     String filePathSource = "/Users/shreyassl/Documents/GitHub/Soot-CSE605/sources.txt";
     BufferedReader reader = new BufferedReader(new FileReader(filePathSource));
     String line = reader.readLine();
+    int sum = 0;
+
   }
   public static void main(String[] var0)
   {

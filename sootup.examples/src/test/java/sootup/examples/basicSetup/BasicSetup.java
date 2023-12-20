@@ -37,6 +37,7 @@ import sootup.jimple.parser.JimpleProject;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.List;
+
 /** This example illustrates how to create and use a new Soot Project. */
 @Category(Java8Test.class)
 public class BasicSetup {
